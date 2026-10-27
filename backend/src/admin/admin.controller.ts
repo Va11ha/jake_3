@@ -1,0 +1,5 @@
+import { Body, Controller, Get, Headers, Param, Patch, Post } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { AppService } from '../app.service';
+@ApiTags('admin') @ApiBearerAuth() @Controller('admin')
+export class AdminController {constructor(private readonly app:AppService){} @Get('overview') overview(@Headers('authorization') h:string){this.app.requireRole(h,['admin']);return this.app.overview()} @Get('users') users(@Headers('authorization') h:string){this.app.requireRole(h,['admin']);return this.app.listUsers()} @Patch('users/:id/role') role(@Param('id') id:string,@Body() body:any,@Headers('authorization') h:string){this.app.requireRole(h,['admin']);return this.app.changeRole(id,body)} @Post('categories') category(@Body() body:any,@Headers('authorization') h:string){this.app.requireRole(h,['admin']);return this.app.addCategory(body)} @Post('courses') course(@Body() body:any,@Headers('authorization') h:string){this.app.requireRole(h,['admin']);return this.app.addCourse(body)} }
